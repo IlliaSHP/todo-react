@@ -3,6 +3,7 @@
 A feature-rich Todo List application built with React as a practice project focused on hooks, performance optimization, and modern state management patterns.
 
 ## Demo
+https://illiashp.github.io/todo-react/
 
 ![Preview](./preview.png)
 
@@ -62,17 +63,9 @@ src/components/TodoList.jsx — renders the list of tasks
 
 ## Installation
 
-git clone https://github.com/your-username/todo-react.git
-
-cd todo-react
-
-npm install
-
-npm run dev
-
-## Roadmap
-
-- Task priority levels
+git clone https://github.com/IlliaSHP/todo-react.git
+git
+ity levels
 - Due dates
 - Drag and drop reordering
 - Dark mode
