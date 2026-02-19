@@ -22,7 +22,7 @@ const Todo = () => {
 
   const newTaskInputRef = useRef(null)
   const firstIncompleteTaskRef = useRef(null)
-  const firstIncompleteTaskId = tasks.fing(({ isDone }) => !isDone)?.id
+  const firstIncompleteTaskId = tasks.find(({ isDone }) => !isDone)?.id
 
   const deleteAllTasks = useCallback(() => {
     const isConfirmed = confirm('Are you sure you want to delete all?')
@@ -32,11 +32,20 @@ const Todo = () => {
     }
   }, [])
 
+  // const deleteTask = useCallback((taskId) => {
+  //   setTasks(
+  //     tasks.filter((task) => task.id !== taskId)
+  //   )
+  // }, [tasks])
+
   const deleteTask = useCallback((taskId) => {
-    setTasks(
-      tasks.filter((task) => task.id !== taskId)
-    )
-  }, [tasks])
+    // Передаємо функцію в setTasks замість значення.
+    // React сам викликає цю функцію і передає туди
+    // актуальний масив tasks як prevTasks.
+    // Тому ми не читаємо tasks ззовні (немає замикання)
+    // і не потрібно вказувати tasks в dependencies.
+    setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId))
+  }, []) // [] — функція створюється один раз і завжди працює зі свіжими даними
 
   const toggleTaskComplete = useCallback((taskId, isDone) => {
     setTasks(
@@ -58,7 +67,7 @@ const Todo = () => {
         isDone: false,
       }
 
-      setTasks([...tasks, newTask]);
+      setTasks((prevTasks) => [...prevTasks, newTask]);
       setNewTaskTitle('')
       setSearchQuery('')
       newTaskInputRef.current.focus()
