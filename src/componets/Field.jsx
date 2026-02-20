@@ -9,8 +9,6 @@ const Field = (props) => {
     ref,
   } = props
 
-
-
   return (
     <div className={`field ${className}`}>
       <label className="field__label" htmlFor={id}>
