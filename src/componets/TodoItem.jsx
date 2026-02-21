@@ -18,8 +18,8 @@ const TodoItem = (props) => {
 
   return (
     <li 
-    className={`todo-item ${className}`} 
-    ref={id === firstIncompleteTaskId ? firstIncompleteTaskRef : null}
+      className={`todo-item ${className}`} 
+      ref={id === firstIncompleteTaskId ? firstIncompleteTaskRef : null}
     >
       <input
         className="todo-item__checkbox"
