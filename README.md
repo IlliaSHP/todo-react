@@ -64,8 +64,16 @@ src/components/TodoList.jsx — renders the list of tasks
 ## Installation
 
 git clone https://github.com/IlliaSHP/todo-react.git
-git
-ity levels
+
+cd todo-react
+
+npm install
+
+npm run dev
+
+## Roadmap
+
+- Task priority levels
 - Due dates
 - Drag and drop reordering
 - Dark mode
