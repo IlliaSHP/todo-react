@@ -1,17 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import useTasksLocalStorage from "./useTasksLocalStorage"
-
+import tasksAPI from "../api/tasksAPI";
 
 const useTasks = () => {
-  const {
-    savedTasks,
-    saveTasks,
-  } = useTasksLocalStorage()
-  
-  const [tasks, setTasks] = useState( savedTasks ?? [
-    {id: 'task-1', title: 'Learn React', isDone: false},
-    {id: 'task-2', title: 'Learn TP', isDone: true},
-  ])
+  const [tasks, setTasks] = useState([])
 
   const [newTaskTitle, setNewTaskTitle] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
@@ -20,10 +11,11 @@ const useTasks = () => {
   const deleteAllTasks = useCallback(() => {
     const isConfirmed = confirm('Are you sure you want to delete all?')
 
-    if (isConfirmed) {
-      setTasks([])
+    if (isConfirmed)  {
+      tasksAPI.deleteAll(tasks)
+        .then(() => setTasks([]))
     }
-  }, [])
+  }, [tasks])
 
   // const deleteTask = useCallback((taskId) => {
   //   setTasks(
@@ -36,38 +28,49 @@ const useTasks = () => {
     // актуальний масив tasks як prevTasks.
     // Тому ми не читаємо tasks ззовні (немає замикання)
     // і не потрібно вказувати tasks в dependencies.
-    setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId))
+    // setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId))
+
+    tasksAPI.delete(taskId)
+      .then(() => {
+        setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId))
+        // setTasks(
+        //   tasks.filter((task) => task.id !== taskId)
+        // )
+      })
   }, [])
 
   const toggleTaskComplete = useCallback((taskId, isDone) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === taskId ? { ...task, isDone } : task
-      )
-      // Тут навіть return не потрібен! Arrow function без {} 
-      // повертає значення автоматично
-    )
+    tasksAPI.toggleComplete(taskId, isDone)
+      .then(() => {
+        setTasks(
+          tasks.map((task) =>
+            task.id === taskId ? { ...task, isDone } : task
+          )
+          // Тут навіть return не потрібен! Arrow function без {}
+          // повертає значення автоматично
+        )
+      })
   }, [tasks])
 
   const addTask = useCallback((title) => {
     const newTask = {
-      id: crypto?.randomUUID() ?? Date.now().toString(),
       title,
       isDone: false,
     }
 
-    setTasks((prevTasks) => [...prevTasks, newTask]);
-    setNewTaskTitle('')
-    setSearchQuery('')
-    newTaskInputRef.current.focus()
+    tasksAPI.add(newTask)
+      .then((addedTask) => {
+        setTasks((prevTasks) => [...prevTasks, addedTask]);
+        setNewTaskTitle('')
+        setSearchQuery('')
+        newTaskInputRef.current.focus()
+      })
   }, [])
 
   useEffect(() => {
-    saveTasks(tasks)
-  }, [tasks])
-
-  useEffect(() => {
     newTaskInputRef.current.focus()
+
+    tasksAPI.getAll().then(setTasks)
   }, [])
 
   const filteredTasks = useMemo(() => {
@@ -77,7 +80,6 @@ const useTasks = () => {
     ? tasks.filter(({title}) => title.toLowerCase().includes(clearSearchQuery))
     : null
   }, [searchQuery, tasks])
-
 
   return {
     tasks,
