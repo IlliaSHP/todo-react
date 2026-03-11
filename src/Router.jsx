@@ -48,28 +48,14 @@ const Router = (props) => {
 
   for (const route in routes) {
     const params = matchPath(path, route)
-
     if (params) {
       const Page = routes[route]
-
       return <Page params={params} />
     }
   }
   const NotFound = routes['*']
 
   return <NotFound />
-
-
-  // if (path.startsWith('/tasks/')) {
-  //   const id = path.replace('/tasks/', '')
-  //   const TaskPage = routes['/tasks/:id']
-  //
-  //   return <TaskPage params={{ id }} />
-  // }
-  //
-  // const Page = routes[path] ?? routes['*']
-  //
-  // return <Page />
 }
 
 export default Router
