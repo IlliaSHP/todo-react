@@ -9,7 +9,6 @@ const RouterLink = (props) => {
     event.preventDefault()
     window.history.pushState({}, '', to)
     window.dispatchEvent(new PopStateEvent('popstate'))
-
   }
 
   return (
