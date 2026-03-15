@@ -8,19 +8,24 @@ const AddTaskForm = (props) => {
 
   const {
     addTask,
-    newTaskTitle,
-    setNewTaskTitle,
     newTaskInputRef,
   } = useContext(TasksContext)
 
   const [error, setError] = useState('');
+  const [newTaskTitle, setNewTaskTitle] = useState('')
 
   const clearNewTaskTitle = newTaskTitle.trim();
   const isNewTaskTitleEmpty = clearNewTaskTitle.length === 0;
 
   const onSubmit = (event) => {
     event.preventDefault();
-    !isNewTaskTitleEmpty ? addTask(clearNewTaskTitle) : null;
+
+    if (!isNewTaskTitleEmpty) {
+      addTask(
+        clearNewTaskTitle,
+        () => setNewTaskTitle('')
+      )
+    }
   }
   
   const onInput = (event) => {
