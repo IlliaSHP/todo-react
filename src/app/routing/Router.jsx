@@ -1,4 +1,13 @@
 import {useEffect, useState} from "react";
+import {BASE_URL} from "@/shared/constants";
+
+const getCurrentPath = () => {
+  const pathName = window.location.pathname
+
+  return pathName.startsWith(BASE_URL)
+  ? pathName.slice(BASE_URL.length - 1) || '/'
+  : pathName
+}
 
 const matchPath = (path, route) => {
   const pathParts = path.split('/')   // '/tasks/123' => ['', 'tasks', '123']
@@ -24,11 +33,11 @@ const matchPath = (path, route) => {
 }
 
 const useRouter = () => {
-  const [path, setPath] = useState(window.location.pathname)
+  const [path, setPath] = useState(getCurrentPath())
 
   useEffect(() => {
     const onLocationChange = () => {
-      setPath(window.location.pathname)
+      setPath(getCurrentPath())
     }
 
     window.addEventListener('popstate', onLocationChange)
