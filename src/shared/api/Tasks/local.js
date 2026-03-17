@@ -49,7 +49,7 @@ const localAPI = {
     write(tasks)
   },
 
-  deleteAll: async () => {
+  deleteAll: async (tasks) => {
     await delay()
 
     write([])

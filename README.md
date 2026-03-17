@@ -1,84 +1,63 @@
 # React Todo List
 
-A feature-rich Todo List application built with React as a practice project focused on hooks, performance optimization, and modern state management patterns.
+A Todo List application built with React, focused on scalable architecture
+and modern state management patterns.
 
 ## Demo
-https://illiashp.github.io/todo-react/
+🔗 [Live Demo](https://illiashp.github.io/todo-react/)
 
 ![Preview](./preview.png)
 
+
 ## Tech Stack
 
-- React 18 — component-based UI library
-- JavaScript ES6+ — destructuring, optional chaining, nullish coalescing
-- Vite — fast development build tool
-- CSS — custom styling with CSS variables, organized by component
+- **React 19** — hooks, context, performance optimization
+- **Vite** — build tool and dev server
+- **SCSS Modules** — scoped component styles with CSS variables
+- **json-server** — mock REST API for local development
 
 ## Features
 
-- Add new tasks
-- Mark tasks as complete or incomplete
-- Delete individual tasks or clear all at once
-- Real-time task search and filtering
-- Persistent storage via localStorage — tasks survive page refresh
+- Add, complete, and delete tasks
+- Real-time search with case-insensitive match highlighting
+- CSS enter/exit animations on task add and delete
 - Smooth scroll to the first incomplete task
+- Form validation without external libraries
+- Client-side routing with dynamic segments (`/tasks/:id`)
+- Task detail page with async data fetching
 
-## React Concepts Practiced
+## Technical Highlights
 
-useState — managing tasks list, search query, and new task title
+- **Feature-Sliced Design** — project structure follows FSD methodology
+- **Custom router** — client-side routing via `history.pushState` and `popstate`,
+  built without React Router or any routing library
+- **Dual API layer** — `json-server` in development, `localStorage` in production.
+  Switching is controlled via `VITE_STATIC_BACKEND` environment variable,
+  all feature code stays unchanged
+- **State management** — `useReducer` + `useContext` instead of Redux.
+  Context value is memoized to prevent unnecessary re-renders
+- **Performance** — `memo`, `useCallback`, and `useMemo` applied where
+  re-renders would otherwise propagate through the list
+- **XSS protection** — search highlight escapes HTML entities before
+  injecting markup via `dangerouslySetInnerHTML`
+- **Custom hooks** — `useTasks`, `useIncompleteTaskScroll`,
+  `useCombinedRefs` to keep logic separate from UI
 
-useEffect — syncing tasks to localStorage and auto-focusing input on mount
-
-useRef — referencing the input element for focus control and first incomplete task for smooth scroll
-
-useCallback — memoizing addTask, deleteTask, toggleTaskComplete to prevent unnecessary function recreation on every render
-
-useMemo — memoizing filteredTasks and doneTasks count so expensive computations only re-run when dependencies change
-
-memo — wrapping TodoList and TodoInfo so components skip re-rendering when their props have not changed
-
-Lazy state initialization — useState with a function reads from localStorage only once on mount instead of on every render
-
-Controlled components — form inputs are fully controlled via React state
-
-crypto.randomUUID() — generating unique task IDs natively in the browser
-
-## Project Structure
-
-src/components/AddTaskForm.jsx — form for adding new tasks
-
-src/components/Button.jsx — reusable button component
-
-src/components/Field.jsx — reusable input field with label
-
-src/components/SearchTaskForm.jsx — form for filtering tasks
-
-src/components/Todo.jsx — main component with all state and logic
-
-src/components/TodoInfo.jsx — displays task stats and delete all button
-
-src/components/TodoItem.jsx — single task item
-
-src/components/TodoList.jsx — renders the list of tasks
-
-## Installation
-
+## Getting Started
+```bash
 git clone https://github.com/IlliaSHP/todo-react.git
-
 cd todo-react
-
 npm install
+```
 
-npm run dev
+**Development mode** — with json-server REST API:
+```bash
+npm run server   # terminal 1: start mock API on port 3001
+npm run dev      # terminal 2: start dev server
+```
 
-## Roadmap
-
-- Task priority levels
-- Due dates
-- Drag and drop reordering
-- Dark mode
-- Unit tests with React Testing Library
-
-## License
-
-This project is open source and available under the MIT License.
+**Production mode** — with localStorage instead of json-server:
+```bash
+npm run build
+npm run preview
+```
